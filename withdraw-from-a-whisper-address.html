@@ -155,17 +155,12 @@
 		//Define an async function, which is a normal function but with the word “async” before its name. Async functions have this property: if a line in them has the keyword “await” which expects data from a function containing a promise, the next line won’t run til the promise resolves.
 
 		async function takeMoney( fromprivkey, to ) {
-		//        fromprivkey is the hash of the phrase “the very happiness of mammals is in their luxurious praise”
-		//        var fromprivkey = "689f948179f2e4680f910775dd3d835d4c4bc0ababa64d3ff368ba9afe4f1a63";
-		//        toprivkey is the hash of “the very happiness of mammals is in their luxurious praises”
-		        var toprivkey = "c01c0bf23c91eaffaff9ce556b7fac0854c5f15ed93ea1dbb0bb7d5b984ee6c5";
 		        var fromaddress = getNativeSegwitAddressFromPrivkeyHex( fromprivkey );
 		        var senderPrivkeyWif = getWifFromPrivkeyHex( fromprivkey );
 		        var txid = await getIdOfTxThatSentMeMoney( fromaddress );
 		        var outputnum = await getOutputNumberOfTxThatSentMeMoney( fromaddress, txid );
 		        var frompubkey = getCompressedPubkeyHexFromPrivkeyHex( fromprivkey );
 		        var fromamount = await getAmountOfTxThatSentMeMoney( fromaddress, txid );
-		 //       var to = getNativeSegwitAddressFromPrivkeyHex( toprivkey );
 		        var fee = 500;
 		        sendCoins( senderPrivkeyWif, txid, outputnum, frompubkey, fromamount, to, fee );
 		}

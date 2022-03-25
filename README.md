@@ -1,9 +1,13 @@
 # Whisper Addresses
 Privacy preserving automatic bitcoin address generation in vanilla javascript
 
-# Demo
+# Testnet Demo
 
 View a demo of how whisper addresses work here: https://supertestnet.github.io/whisper-addresses/demo.html
+
+# Mainnet Demo
+
+View a demo of how whisper addresses work here: https://supertestnet.github.io/whisper-addresses/demo-mainnet.html
 
 # Intro
 

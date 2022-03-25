@@ -75,3 +75,12 @@ Whisper addresses are a useful addition to the bitcoin privacy toolset. They all
 * Point addition works like this: take two or more public keys and add them together to get a new pubkey -- the whisper address
 * The only way to get the whisper address's private key is to add together all the original private keys
 * The money "senders" and the recipient create the whisper address, and the senders give their private keys to the money recipient
+
+# Privacy issues that whisper addresses don't solve
+
+* Senders can easily lose their money by making mistakes such as refreshing the page before sending sending the whisper key to the recipient
+* Recipients can easily never receive their money because the donor made a mistake
+* If you send kyc'd bitcoins to a whisper address belonging to a sanctioned individual who later gets caught, the police could check his wallet history and find out that you were one of the people who sent him money, which could lead to legal issues for you
+* Whisper addresses don't help the recipient's privacy if he doxxes his money by sending it to a regulated exchange that knows his identity
+* Police can do a sting operation where they send money to someone, wait for them to consolidate it with their other funds (which noobs do very frequently), and then confiscate everything when they go to cash out the total amount at a regulated exchange
+* People who use whisper addresses for privacy should still use a coinjoin when sweeping the funds into their regular wallet so as not to get their private bitcoins and their kyc's bitcoins mixed together

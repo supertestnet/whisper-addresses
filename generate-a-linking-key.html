@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+	<script src="https://bitcoincore.tech/apps/bitcoinjs-ui/lib/bitcoinjs-lib.js"></script>
+	<script src="https://bundle.run/noble-secp256k1@1.2.14"></script>
+	<script src="https://bundle.run/ecies-lite@1.1.3"></script>
+	<script src="https://bundle.run/bip39@3.0.4"></script>
+	<script src="https://bundle.run/bip32@2.0.6"></script>
+	<script src="https://bundle.run/buffer@6.0.3"></script>
+	<p style="font-weight: bold;">Linking key (you should have this saved somewhere)</p>
+	<p><input type="text" id="linking_key" name="linking_key"></p>
+	<p style="font-weight: bold;">Whisper key (you should have received this in an email)</p>
+	<p><input type="text" id="whisper_key" name="whisper_key"></p>
+	<p style="font-weight: bold;">Bitcoin address (where you want the money to end up)</p>
+	<p><input type="text" id="bitcoin_address" name="bitcoin_address"></p>
+	<p><button type="button" id="submitter">Submit</button></p>
+	<script>
+		document.getElementById( "submitter" ).addEventListener( "click", function() {
+			var linker = document.getElementById( "linking_key" ).value;
+			var whisper = document.getElementById( "whisper_key" ).value;
+			var address = document.getElementById( "bitcoin_address" ).value;
+			var privkeyhex = addKeys( linker, whisper );
+			var whisper_address = getNativeSegwitAddressFromPrivkeyHex( privkeyhex );
+			console.log( whisper_address );
+			takeMoney( privkeyhex, address );
+		});
+	</script>
+	<script>
+		function addKeys( privkey1, privkey2 ) {
+			var combokey = ( ( BigInt( "0x" + privkey1 ) + BigInt( "0x" + privkey2 ) ) % BigInt( "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f" ) ).toString( 16 );
+			return combokey;
+		}
+	</script>
+	<script>
+		takeMoney( linker, whisper, address ) {
+			var privkeyhex = addKeys( linker, whisper );
+
+		}
+	</script>
+	<script>
+		//Define functions which we will use later to create a psbt, namely, functions for getting a WIF-formatted privkey and an address from a hex-formatted privkey (as well as a hex-formatted pubkey)
+
+		function getWifFromPrivkeyHex( privkeyhex ) {
+		        return bitcoinjs.ECPair.fromPrivateKey( buffer.Buffer.from( privkeyhex, "hex" ), { network: bitcoinjs.networks.testnet } ).toWIF();
+		}
+
+		function getNativeSegwitAddressFromPrivkeyHex( privkeyhex ) {
+		        return bitcoinjs.payments.p2wpkh({ pubkey: bitcoinjs.ECPair.fromPrivateKey( buffer.Buffer.from( privkeyhex, "hex" ), { network: bitcoinjs.networks.testnet } ).publicKey, network: bitcoinjs.networks.testnet }).address;
+		}
+
+		function getCompressedPubkeyHexFromPrivkeyHex( privkeyhex ) {
+		                return bitcoinjs.ECPair.fromPrivateKey( buffer.Buffer.from( privkeyhex, "hex" ), { network: bitcoinjs.networks.testnet } ).publicKey.toString( "hex" );
+		}
+
+		function pushBTCpmt( rawtx ) {
+		        var xhttp = new XMLHttpRequest();
+		        xhttp.onreadystatechange = function() {
+		                if ( this.readyState == 4 && ( this.status == 200 || this.status == 201 ) ) {
+		                        alert( this.responseText );
+		                }
+		        };
+		        xhttp.open( "POST", "https://api.blockcypher.com/v1/btc/test3/txs/push", true );
+		        xhttp.setRequestHeader( "Content-type", "text/plain" );
+		        xhttp.send( '{"tx":"' + rawtx + '"}' );
+		}
+
+		function sendCoins( senderPrivkeyWif, inputtxid, inputindex, frompubkey, fromamount, to, fee ) {
+		        var toamount = fromamount - fee;
+		        var psbt = new bitcoinjs.Psbt({ network: bitcoinjs.networks.testnet })
+		                .addInput({
+		                        hash: inputtxid,
+		                        index: inputindex,
+		                        witnessUtxo: {
+		                                script: buffer.Buffer.from( '0014' + bitcoinjs.crypto.ripemd160( bitcoinjs.crypto.sha256( buffer.Buffer.from( frompubkey, "hex" ) ) ).toString( 'hex' ), 'hex' ),
+		                                value: fromamount,
+		                        },
+		                })
+		                .addOutput({
+		                        address: to,
+		                        value: toamount,
+		                });
+		                var keyPairSender = bitcoinjs.ECPair.fromWIF( senderPrivkeyWif, bitcoinjs.networks.testnet );
+		                psbt.signInput( 0, keyPairSender );
+		                psbt.validateSignaturesOfInput( 0 );
+		                psbt.finalizeAllInputs();
+		                pushBTCpmt( psbt.extractTransaction().toHex() );
+		             //	console.log( psbt.extractTransaction().toHex() );
+		}
+
+		//Define functions for getting data from various sources that take time to deliver it. We’ll call them later too.
+
+		function getIdOfTxThatSentMeMoney( stealthaddress ) {
+		      return new Promise( function( resolve, reject ) {
+		            var xhttp = new XMLHttpRequest();
+		            xhttp.onreadystatechange = function() {
+		                  if ( this.readyState == 4 && this.status == 200 ) {
+		                        var json = JSON.parse( xhttp.responseText );
+		                      if ( json[ "unconfirmed_txrefs" ] && json[ "unconfirmed_txrefs" ].length > 0 ) {
+		                              alert( "You have at least one unconfirmed transaction, please try again later" );
+		                              reject( "You have at least one unconfirmed transaction, please try again later" );
+		                      } else {
+		                                length = json[ "txrefs" ].length;
+		                                var txid = json[ "txrefs" ][ length - 1 ][ "tx_hash" ];
+		                                sessionStorage[ "txid" ] = txid;
+		                                resolve( txid );
+		                }
+		                  }
+		            };
+		            xhttp.open( "GET", "https://api.blockcypher.com/v1/btc/test3/addrs/" + stealthaddress, true );
+		            xhttp.send();
+		      });
+		}
+
+		function getOutputNumberOfTxThatSentMeMoney( stealthaddress, txid ) {
+		      return new Promise( function( resolve, reject ) {
+		            var xhttp = new XMLHttpRequest();
+		            xhttp.onreadystatechange = function() {
+		                  if ( this.readyState == 4 && this.status == 200 ) {
+		                        var json = JSON.parse( xhttp.responseText );
+		                        var i; for ( i=0; i<json[ "outputs" ].length; i++ ) {
+		                              var j; for ( j=0; j<json[ "outputs" ][ i ][ "addresses" ].length; j++ ) {
+		                                    if ( stealthaddress == json[ "outputs" ][ i ][ "addresses" ][ j ] ) {
+		                                          resolve( i );
+		                                    }
+		                              }
+		                        }
+		                  }
+		            };
+		            xhttp.open( "GET", "https://api.blockcypher.com/v1/btc/test3/txs/" + txid, true );
+		            xhttp.send();
+		      });
+		}
+
+		function getAmountOfTxThatSentMeMoney( stealthaddress, txid ) {
+		      return new Promise( function( resolve, reject ) {
+		            var xhttp = new XMLHttpRequest();
+		            xhttp.onreadystatechange = function() {
+		                  if ( this.readyState == 4 && this.status == 200 ) {
+		                        var json = JSON.parse( xhttp.responseText );
+		                        var i; for ( i=0; i<json[ "outputs" ].length; i++ ) {
+		                              var j; for ( j=0; j<json[ "outputs" ][ i ][ "addresses" ].length; j++ ) {
+		                                    if ( stealthaddress == json[ "outputs" ][ i ][ "addresses" ][ j ] ) {
+		                                          resolve( json[ "outputs" ][ i ][ "value" ] );
+		                                    }
+		                              }
+		                        }
+		                  }
+		            };
+		            xhttp.open( "GET", "https://api.blockcypher.com/v1/btc/test3/txs/" + txid, true );
+		            xhttp.send();
+		      });
+		}
+
+		//Define an async function, which is a normal function but with the word “async” before its name. Async functions have this property: if a line in them has the keyword “await” which expects data from a function containing a promise, the next line won’t run til the promise resolves.
+
+		async function takeMoney( fromprivkey, to ) {
+		//        fromprivkey is the hash of the phrase “the very happiness of mammals is in their luxurious praise”
+		//        var fromprivkey = "689f948179f2e4680f910775dd3d835d4c4bc0ababa64d3ff368ba9afe4f1a63";
+		//        toprivkey is the hash of “the very happiness of mammals is in their luxurious praises”
+		        var toprivkey = "c01c0bf23c91eaffaff9ce556b7fac0854c5f15ed93ea1dbb0bb7d5b984ee6c5";
+		        var fromaddress = getNativeSegwitAddressFromPrivkeyHex( fromprivkey );
+		        var senderPrivkeyWif = getWifFromPrivkeyHex( fromprivkey );
+		        var txid = await getIdOfTxThatSentMeMoney( fromaddress );
+		        var outputnum = await getOutputNumberOfTxThatSentMeMoney( fromaddress, txid );
+		        var frompubkey = getCompressedPubkeyHexFromPrivkeyHex( fromprivkey );
+		        var fromamount = await getAmountOfTxThatSentMeMoney( fromaddress, txid );
+		 //       var to = getNativeSegwitAddressFromPrivkeyHex( toprivkey );
+		        var fee = 500;
+		        sendCoins( senderPrivkeyWif, txid, outputnum, frompubkey, fromamount, to, fee );
+		}
+	</script>
+</body>
+</html>

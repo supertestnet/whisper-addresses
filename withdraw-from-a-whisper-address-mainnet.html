@@ -20,7 +20,7 @@
             var linker = document.getElementById( "linking_key" ).value;
             var whisper = document.getElementById( "whisper_key" ).value;
             var address = document.getElementById( "bitcoin_address" ).value;
-            var privkeyhex = addKeys( linker, whisper );
+            var privkeyhex = ( "00" + addKeys( linker, whisper ) ).slice (-64);
             var whisper_address = getNativeSegwitAddressFromPrivkeyHex( privkeyhex );
             console.log( whisper_address );
             takeMoney( privkeyhex, address );
@@ -30,12 +30,6 @@
         function addKeys( privkey1, privkey2 ) {
             var combokey = ( ( BigInt( "0x" + privkey1 ) + BigInt( "0x" + privkey2 ) ) % BigInt( "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f" ) ).toString( 16 );
             return combokey;
-        }
-    </script>
-    <script>
-        takeMoney( linker, whisper, address ) {
-            var privkeyhex = addKeys( linker, whisper );
-
         }
     </script>
     <script>

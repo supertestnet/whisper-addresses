@@ -78,7 +78,7 @@ Whisper addresses are a useful addition to the bitcoin privacy toolset. They all
 
 # Privacy issues that whisper addresses don't solve
 
-* Senders can easily lose their money by making mistakes such as refreshing the page before sending sending the whisper key to the recipient
+* Senders can easily lose their money by making mistakes such as refreshing the page before sending the whisper key to the recipient
 * Recipients can easily never receive their money because the donor made a mistake
 * If you send kyc'd bitcoins to a whisper address belonging to a sanctioned individual who later gets caught, the police could check his wallet history and find out that you were one of the people who sent him money, which could lead to legal issues for you
 * Whisper addresses don't help the recipient's privacy if he doxxes his money by sending it to a regulated exchange that knows his identity

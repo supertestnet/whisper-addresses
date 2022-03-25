@@ -1,5 +1,5 @@
 # Whisper Addresses
-Privacy preserving automatic bitcoin address generation in vanilla javascript
+A [crappy] BIP47 ripoff, poorly thought out and prone to loss of funds [source](https://t.me/c/1297638173/14778)
 
 # Testnet Demo
 

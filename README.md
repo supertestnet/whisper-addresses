@@ -15,7 +15,7 @@ Imagine you want to create a website to help protesters receive bitcoin in a cou
 
 This is where whisper addresses are helpful. Whisper addresses allow you to put something called a "linking key" into the field where a bitcoin address would go. Linking keys allow each visitor to your site to generate a bitcoin address that "belongs to" the person who created the linking key. Each visitor will generate a "whisper" bitcoin address which no one can associate with the linking key except the person who generated it and the recipient of the money. Each whisper address will start out empty. If the police visit the site, they will see an address that no one has ever seen before and which will likely never be seen again after the police leave the site. They can blacklist that address, but there's no money in it so it's no big deal. Each "legit" visitor will also generate a whisper address that belongs to the intended recipient. These whisper addresses will also be things that were never seen before, and therefore they are not on the police's blacklist. If the user sends money to it, they can also send some data to the intended recipient that allows them to find the address on the blockchain and withdraw the money in it to their regular wallet.
 
-In short, the "why" of whisper addresses is censorship resistance. whisper addresses are unique for each visitor to the site, cannot be associated with the recipient, and cannot be blacklisted by exchanges.
+In short, the "why" of whisper addresses is censorship resistance. Whisper addresses are unique for each visitor to the site, cannot be associated with the recipient, and cannot be blacklisted by exchanges.
 
 # Are whisper addresses related to BIP47?
 

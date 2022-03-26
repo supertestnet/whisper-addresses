@@ -83,4 +83,4 @@ Whisper addresses are a useful addition to the bitcoin privacy toolset. They all
 * If you send kyc'd bitcoins to a whisper address belonging to a sanctioned individual who later gets caught, the police could check his wallet history and find out that you were one of the people who sent him money, which could lead to legal issues for you
 * Whisper addresses don't help the recipient's privacy if he doxxes his money by sending it to a regulated exchange that knows his identity
 * Police can do a sting operation where they send money to someone, wait for them to consolidate it with their other funds (which noobs do very frequently), and then confiscate everything when they go to cash out the total amount at a regulated exchange
-* People who use whisper addresses for privacy should still use a coinjoin when sweeping the funds into their regular wallet so as not to get their private bitcoins and their kyc's bitcoins mixed together
+* People who use whisper addresses for privacy should still use a coinjoin when sweeping the funds into their regular wallet so as not to get their private bitcoins and their kyc'd bitcoins mixed together

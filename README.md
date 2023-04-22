@@ -39,7 +39,7 @@ Non-deterministic stealth addresses ("whisper addresses") are described by this 
 
 Bitcoin addresses have two main components: a public key and a private key. The private key is something you're supposed to keep secret because it lets you move the money in the bitcoin address. The public key is fine to share with people, it's practically the same thing as a bitcoin address but with a special encoding so that bitcoin wallets can recognize them and to make them distinct from public key cryptography systems other than bitcoin. You're supposed to share your bitcoin address with people in order to receive money from them and it's also fine to share the underlying public key.
 
-Public keys and private keys are both made of numbers. Imagine a simplified public keys system that works like this:
+Public keys and private keys are both made of numbers. Imagine a simplified public key system that works like this:
 
 ```
 123 <-- that's a public key

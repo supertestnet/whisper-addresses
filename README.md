@@ -54,15 +54,15 @@ DEF <-- that's another private key
 One of the things you can do with public key cryptography is called point addition. Point addition allows you to add two public keys and two private keys together and still get a valid keypair. For example:
 
 ```
-142536 <-- that's 123 and 456 added together
-ADBECF <-- that's ABC and DEF added together
+123456 <-- that's 123 and 456 added together
+ABCDEF <-- that's ABC and DEF added together
 ```
 
 Those are both still perfectly valid public keys and private keys, and moreover, the "combined private key" is capable of spending money that someone sent to the "combined public key."
 
 Whisper addresses take advantage of the point addition property to enhance the recipient's privacy. The recipient of the money can create a public key (such as 123), put it on a public website, and keep the private key secret. The police may blacklist his public key but that's fine because, as you'll see in a moment, he won't actually receive any money at that public key. Instead, it will only serve as a "linking key" which other people can use to send money to other bitcoin addresses that are not blacklisted but in such a way that the recipient can still recover the money in those addresses.
 
-Users who want to use these linking keys just have to visit the public website. Their browser will generate a fresh keypair, which I call an ephemeral keypair. (In the example above, 456/DEF might be an ephemeral keypair.) Their browser also automatically adds their ephemeral pubkey to the recipient's linking key and thus derives 142536 -- the whisper address -- which it displays to the visitor. Each visitor to the site will see a different whisper address because their browser will generate a different ephemeral keypair. After they send money to the whisper address, they can email their ephemeral private key to the recipient of the money. He can then add the ephemeral private key to his linking key's private key and thus derive the private key he needs to take money out of the whisper address. Voila! He received money to a unique address that is not on anyone's blacklist, which is very censorship resistant, and the people visiting his website did not need a special wallet that knows the protocol and also did not need to add a special marker to the blockchain and thus incur an unnecessary expense.
+Users who want to use these linking keys just have to visit the public website. Their browser will generate a fresh keypair, which I call an ephemeral keypair. (In the example above, 456/DEF might be an ephemeral keypair.) Their browser also automatically adds their ephemeral pubkey to the recipient's linking key and thus derives 123456 -- the whisper address -- which it displays to the visitor. Each visitor to the site will see a different whisper address because their browser will generate a different ephemeral keypair. After they send money to the whisper address, they can email their ephemeral private key to the recipient of the money. He can then add the ephemeral private key to his linking key's private key and thus derive the private key he needs to take money out of the whisper address. Voila! He received money to a unique address that is not on anyone's blacklist, which is very censorship resistant, and the people visiting his website did not need a special wallet that knows the protocol and also did not need to add a special marker to the blockchain and thus incur an unnecessary expense.
 
 # Summing up
 

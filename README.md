@@ -1,5 +1,5 @@
 # Whisper Addresses
-A BIP47 ripoff that is poorly thought out and prone to loss of funds -- but with javascript interpreters!
+A BIP47 ripoff that uses javascript interpreters for backward compatibility 
 
 # Testnet Demo
 

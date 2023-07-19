@@ -1,5 +1,5 @@
 # Whisper Addresses
-A BIP47 ripoff that uses javascript interpreters for backward compatibility 
+A BIP47 ripoff with javascript interpreters for backward compatibility 
 
 # Testnet Demo
 

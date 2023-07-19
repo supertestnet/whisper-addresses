@@ -17,11 +17,11 @@ Withdrawing the bitcoin: https://twitter.com/PlebLab/status/1507222897886216193
 
 # TLDR
 
-* Whisper addresses are bitcoin addresses that are created using point addition by two or more people working together 
+* Whisper addresses are bitcoin addresses that are created using point addition by two people working together 
 * Only one of those people can withdraw money from the whisper address, and exchanges or governments can't know who it is
-* Point addition works like this: take two or more public keys and add them together to get a new pubkey -- the whisper address
-* The only way to get the whisper address's private key is to add together all the original private keys
-* The money "senders" and the recipient create the whisper address, and the senders give their private keys to the money recipient
+* Point addition works like this: take two public keys and add them together to get a new pubkey -- the whisper address
+* The only way to get the whisper address's private key is to add together the original two private keys
+* The money "sender" uses the recipient's pubkey to create a whisper address, then gives the second private key to the recipient
 
 # Intro
 
